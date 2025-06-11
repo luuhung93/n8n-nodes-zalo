@@ -26,14 +26,9 @@ export class ZaloLoginByQr implements INodeType {
 		icon: 'file:../shared/zalo.svg',
 		credentials: [
 			{
-				name: 'zaloApi',
-				required: false,
-				displayName: 'Zalo Credential to connect with',
-			},
-			{
 				name: 'n8nZaloApi',
 				required: true,
-				displayName: 'n8n Account Credential 2',
+				displayName: 'n8n Account Credential',
 			},
 		],
 		properties: [
@@ -344,9 +339,8 @@ export class ZaloLoginByQr implements INodeType {
 												) => {
 													const n8nApi =
 														await this.getCredentials('n8nZaloApi');
-													// const n8nApiUrl = n8nApi.url as string;
-													// const fullApiUrl = `${n8nApiUrl}/api/v1/credentials`;
-													const fullApiUrl = `http://127.0.0.1:5678/api/v1/credentials`;
+													const n8nApiUrl = n8nApi.url as string;
+													const fullApiUrl = `${n8nApiUrl}/api/v1/credentials`;
 
 													const n8nApiKey = n8nApi.apiKey as string;
 													console.error(

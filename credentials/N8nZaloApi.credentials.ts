@@ -5,7 +5,7 @@ export class N8nZaloApi implements ICredentialType {
 	displayName = 'n8n Zalo Account Credential';
 	documentationUrl = 'n8n-n8n-api';
 
-	icon: Icon = 'file:shared/n8n.png';
+	icon: Icon = 'file:shared/n8n.svg';
 
 	properties: INodeProperties[] = [
 		{
