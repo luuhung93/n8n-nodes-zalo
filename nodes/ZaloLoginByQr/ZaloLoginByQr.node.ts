@@ -33,7 +33,7 @@ export class ZaloLoginByQr implements INodeType {
 			{
 				name: 'n8nZaloApi',
 				required: true,
-				displayName: 'n8n Account Credential',
+				displayName: 'n8n Account Credential 2',
 			},
 		],
 		properties: [
