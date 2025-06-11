@@ -140,7 +140,7 @@ export const zaloUserFields: INodeProperties[] = [
 		default: '',
 		description: 'Client message ID',
 	},
-		// Change alias name
+	// Change alias name
 	{
 		displayName: 'User ID',
 		name: 'userId',

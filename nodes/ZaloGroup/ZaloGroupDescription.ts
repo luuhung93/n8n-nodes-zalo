@@ -98,7 +98,8 @@ export const zaloGroupFields: INodeProperties[] = [
 		description: 'Tên của nhóm mới',
 	},
 	{
-		displayName: 'Danh Sách ID Thành Viên (nếu nhiều người dùng vui lòng phân cách bằng dấu phẩy)',
+		displayName:
+			'Danh Sách ID Thành Viên (nếu nhiều người dùng vui lòng phân cách bằng dấu phẩy)',
 		name: 'userIds',
 		type: 'string',
 		required: true,
@@ -180,7 +181,8 @@ export const zaloGroupFields: INodeProperties[] = [
 		description: 'ID của nhóm',
 	},
 	{
-		displayName: 'Danh Sách ID Thành Viên (nếu nhiều người dùng vui lòng phân cách bằng dấu phẩy)',
+		displayName:
+			'Danh Sách ID Thành Viên (nếu nhiều người dùng vui lòng phân cách bằng dấu phẩy)',
 		name: 'userIds',
 		type: 'string',
 		required: true,
@@ -385,4 +387,4 @@ export const zaloGroupFields: INodeProperties[] = [
 		},
 		description: 'Ghim ghi chú lên đầu nhóm',
 	},
-]; 
+];

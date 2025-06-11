@@ -4,7 +4,7 @@ import {
 	IWebhookFunctions,
 	IWebhookResponseData,
 	NodeOperationError,
-	IHookFunctions
+	IHookFunctions,
 } from 'n8n-workflow';
 import { API, Zalo, FriendEventType, FriendEvent } from 'zca-js';
 
@@ -51,7 +51,7 @@ export class ZaloFriendTrigger implements INodeType {
 						name: 'Friend Requests',
 						value: FriendEventType.REQUEST,
 						description: 'Nghe sự kiện yêu cầu kết bạn',
-					}
+					},
 				],
 				default: [FriendEventType.REQUEST],
 				required: true,
@@ -80,7 +80,11 @@ export class ZaloFriendTrigger implements INodeType {
 					const userAgentFromCred = credentials.userAgent as string;
 
 					const zalo = new Zalo();
-					api = await zalo.login({ cookie: cookieFromCred, imei: imeiFromCred, userAgent: userAgentFromCred });
+					api = await zalo.login({
+						cookie: cookieFromCred,
+						imei: imeiFromCred,
+						userAgent: userAgentFromCred,
+					});
 
 					if (!api) {
 						throw new NodeOperationError(
@@ -91,20 +95,22 @@ export class ZaloFriendTrigger implements INodeType {
 					const webhookUrl = this.getNodeWebhookUrl('default') as string;
 					console.log(webhookUrl);
 
-
 					// Add message event listener
 					api.listener.on('friend_event', async (event: FriendEvent) => {
-						const nodeEventTypes = this.getNodeParameter('eventTypes', 0) as FriendEventType[];
-						if(nodeEventTypes.includes(event.type)) {
+						const nodeEventTypes = this.getNodeParameter(
+							'eventTypes',
+							0,
+						) as FriendEventType[];
+						if (nodeEventTypes.includes(event.type)) {
 							this.helpers.httpRequest({
-									method: 'POST',
-									url: webhookUrl,
-									body: {
-										friendEvent: event.data,
-									},
-									headers: {
-											'Content-Type': 'application/json',
-									},
+								method: 'POST',
+								url: webhookUrl,
+								body: {
+									friendEvent: event.data,
+								},
+								headers: {
+									'Content-Type': 'application/json',
+								},
 							});
 						}
 					});
@@ -114,7 +120,10 @@ export class ZaloFriendTrigger implements INodeType {
 
 					const webhookData = this.getWorkflowStaticData('node');
 					webhookData.isConnected = true;
-					webhookData.eventTypes = this.getNodeParameter('eventTypes', 0) as FriendEventType[];
+					webhookData.eventTypes = this.getNodeParameter(
+						'eventTypes',
+						0,
+					) as FriendEventType[];
 
 					return true;
 				} catch (error) {

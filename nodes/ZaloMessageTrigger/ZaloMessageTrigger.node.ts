@@ -95,7 +95,11 @@ export class ZaloMessageTrigger implements INodeType {
 
 					const selfListen = this.getNodeParameter('selfListen', 0) as boolean;
 					const zalo = new Zalo({ selfListen });
-					api = await zalo.login({ cookie: cookieFromCred, imei: imeiFromCred, userAgent: userAgentFromCred });
+					api = await zalo.login({
+						cookie: cookieFromCred,
+						imei: imeiFromCred,
+						userAgent: userAgentFromCred,
+					});
 
 					if (!api) {
 						throw new NodeOperationError(
@@ -103,25 +107,25 @@ export class ZaloMessageTrigger implements INodeType {
 							'No API instance found. Please make sure to provide valid credentials.',
 						);
 					}
-                    const webhookUrl = this.getNodeWebhookUrl('default') as string;
-                    console.log(webhookUrl);
+					const webhookUrl = this.getNodeWebhookUrl('default') as string;
+					console.log(webhookUrl);
 					// Add message event listener
 					api.listener.on('message', async (message) => {
 						const webhookData = this.getWorkflowStaticData('node');
 						// const eventTypes = webhookData.eventTypes as ThreadType[];
-                        this.helpers.httpRequest({
-                            method: 'POST',
-                            url: webhookUrl,
-                            body: {
-                                message: message,
-                            },
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                        });
+						this.helpers.httpRequest({
+							method: 'POST',
+							url: webhookUrl,
+							body: {
+								message: message,
+							},
+							headers: {
+								'Content-Type': 'application/json',
+							},
+						});
 						// if (eventTypes.includes(message.type)) {
-                        //     console.log(message);
-							// Store message in static data to be processed by webhook method
+						//     console.log(message);
+						// Store message in static data to be processed by webhook method
 						webhookData.lastMessage = message;
 						// }
 					});
@@ -161,17 +165,15 @@ export class ZaloMessageTrigger implements INodeType {
 	};
 
 	async webhook(this: IWebhookFunctions): Promise<IWebhookResponseData> {
-        const req = this.getRequestObject();
-        const body = req.body;
-        console.log(body);
+		const req = this.getRequestObject();
+		const body = req.body;
+		console.log(body);
 		const webhookData = this.getWorkflowStaticData('node');
 		const message = webhookData.lastMessage as IDataObject;
-        console.log(message);
-
+		console.log(message);
 
 		// Clear the message after processing
 		delete webhookData.lastMessage;
-
 
 		return {
 			workflowData: [this.helpers.returnJsonArray(req.body)],

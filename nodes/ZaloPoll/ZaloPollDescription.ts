@@ -19,7 +19,7 @@ export const zaloPollOperations: INodeProperties[] = [
 				description: 'Tạo một bình chọn mới',
 				action: 'Tạo bình chọn',
 			},
-            {
+			{
 				name: 'Lấy thông tin bình chọn',
 				value: 'getPoll',
 				description: 'Lấy thông tin bình chọn',
@@ -42,20 +42,20 @@ export const zaloPollFields: INodeProperties[] = [
 	/*                            zaloPoll:createPoll                            */
 	/* -------------------------------------------------------------------------- */
 	{
-        displayName: 'ID Nhóm',
-        name: 'groupId',
-        type: 'string',
-        default: '',
-        required: true,
-        displayOptions: {
-            show: {
+		displayName: 'ID Nhóm',
+		name: 'groupId',
+		type: 'string',
+		default: '',
+		required: true,
+		displayOptions: {
+			show: {
 				resource: ['zaloPoll'],
-                operation: ['createPoll'],
-            },
-        },
-        description: 'ID của nhóm để tạo poll (chỉ hoạt động với nhóm)',
-    },
-    {
+				operation: ['createPoll'],
+			},
+		},
+		description: 'ID của nhóm để tạo poll (chỉ hoạt động với nhóm)',
+	},
+	{
 		displayName: 'Chủ đề bình chọn',
 		name: 'question',
 		type: 'string',
@@ -75,21 +75,21 @@ export const zaloPollFields: INodeProperties[] = [
 		type: 'options',
 		options: [
 			{
-			name: 'Danh sách',
-			value: 'list',
-			description: 'Nhập từng lựa chọn riêng biệt',
+				name: 'Danh sách',
+				value: 'list',
+				description: 'Nhập từng lựa chọn riêng biệt',
 			},
 			{
-			name: 'Văn bản',
-			value: 'text',
-			description: 'Nhập tất cả lựa chọn trong một ô, phân tách bằng dấu phẩy',
+				name: 'Văn bản',
+				value: 'text',
+				description: 'Nhập tất cả lựa chọn trong một ô, phân tách bằng dấu phẩy',
 			},
 		],
 		default: 'list',
 		displayOptions: {
 			show: {
-			resource: ['zaloPoll'],
-			operation: ['createPoll'],
+				resource: ['zaloPoll'],
+				operation: ['createPoll'],
 			},
 		},
 	},
@@ -101,42 +101,38 @@ export const zaloPollFields: INodeProperties[] = [
 		placeholder: 'Thêm lựa chọn',
 		typeOptions: {
 			multipleValues: true,
-			sortable: true
+			sortable: true,
 		},
 		default: {
-			options: [
-			{ option: '' },
-			{ option: '' },
-			],
+			options: [{ option: '' }, { option: '' }],
 		},
 		displayOptions: {
 			show: {
-			resource: ['zaloPoll'],
-			operation: ['createPoll'],
-			optionInputType: ['list'],
+				resource: ['zaloPoll'],
+				operation: ['createPoll'],
+				optionInputType: ['list'],
 			},
 		},
 		options: [
 			{
-			name: 'options',
-			displayName: 'Lựa chọn',
-			values: [
-				{
+				name: 'options',
 				displayName: 'Lựa chọn',
-				name: 'option',
-				type: 'string',
-				default: '',
-				placeholder: 'Nhập lựa chọn...',
-				description: 'Nội dung của lựa chọn',
-				required: true,
-				},
-			],
+				values: [
+					{
+						displayName: 'Lựa chọn',
+						name: 'option',
+						type: 'string',
+						default: '',
+						placeholder: 'Nhập lựa chọn...',
+						description: 'Nội dung của lựa chọn',
+						required: true,
+					},
+				],
 			},
 		],
 		description: 'Thêm các lựa chọn cho bình chọn',
 	},
 	{
-
 		displayName: 'Các lựa chọn',
 		name: 'optionsString',
 		type: 'string',
@@ -144,14 +140,14 @@ export const zaloPollFields: INodeProperties[] = [
 		placeholder: 'Nhập các lựa chọn, phân tách bằng dấu phẩy...',
 		displayOptions: {
 			show: {
-			resource: ['zaloPoll'],
-			operation: ['createPoll'],
-			optionInputType: ['text'],
+				resource: ['zaloPoll'],
+				operation: ['createPoll'],
+				optionInputType: ['text'],
 			},
 		},
 		description: 'Nhập các lựa chọn, mỗi lựa chọn phân tách bằng dấu phẩy',
 	},
-    {
+	{
 		displayName: 'Thời hạn bình chọn',
 		name: 'expiredTime',
 		type: 'dateTime',
@@ -165,7 +161,7 @@ export const zaloPollFields: INodeProperties[] = [
 		},
 		description: 'Thời hạn bình chọn (Để trống nếu không có thời hạn)',
 	},
-    {
+	{
 		displayName: 'Ghim lên đầu trò chuyện',
 		name: 'pinAct',
 		type: 'boolean',
@@ -179,7 +175,7 @@ export const zaloPollFields: INodeProperties[] = [
 		},
 		description: 'Tạo ghim lên đầu trò chuyện',
 	},
-    {
+	{
 		displayName: 'Chọn nhiều phương án',
 		name: 'allowMultiChoices',
 		type: 'boolean',
@@ -193,7 +189,7 @@ export const zaloPollFields: INodeProperties[] = [
 		},
 		description: 'Người tham gia có thể bình chọn nhiều phương án khác nhau',
 	},
-    {
+	{
 		displayName: 'Có thể thêm phương án',
 		name: 'allowAddNewOption',
 		type: 'boolean',
@@ -207,7 +203,7 @@ export const zaloPollFields: INodeProperties[] = [
 		},
 		description: 'Người tham gia có thể thêm phương án mới',
 	},
-    {
+	{
 		displayName: 'Ẩn kết quả khi chưa bình chọn',
 		name: 'hideVotePreview',
 		type: 'boolean',
@@ -221,7 +217,7 @@ export const zaloPollFields: INodeProperties[] = [
 		},
 		description: 'Người tham gia chỉ thấy kết quả sau khi bình chọn',
 	},
-    {
+	{
 		displayName: 'Ẩn người bình chọn',
 		name: 'isAnonymous',
 		type: 'boolean',
@@ -240,35 +236,35 @@ export const zaloPollFields: INodeProperties[] = [
 	/*                            zaloPoll:getPoll                           */
 	/* -------------------------------------------------------------------------- */
 	{
-        displayName: 'ID bình chọn',
-        name: 'poll_id',
-        type: 'number',
-        default: '',
-        required: true,
-        displayOptions: {
-            show: {
+		displayName: 'ID bình chọn',
+		name: 'poll_id',
+		type: 'number',
+		default: '',
+		required: true,
+		displayOptions: {
+			show: {
 				resource: ['zaloPoll'],
-                operation: ['getPoll'],
-            },
-        },
-        description: 'ID của bình chọn',
-    },
+				operation: ['getPoll'],
+			},
+		},
+		description: 'ID của bình chọn',
+	},
 
 	/* -------------------------------------------------------------------------- */
 	/*                            zaloPoll:lockPoll                        */
 	/* -------------------------------------------------------------------------- */
 	{
-        displayName: 'ID bình chọn',
-        name: 'poll_id',
-        type: 'number',
-        default: '',
-        required: true,
-        displayOptions: {
-            show: {
+		displayName: 'ID bình chọn',
+		name: 'poll_id',
+		type: 'number',
+		default: '',
+		required: true,
+		displayOptions: {
+			show: {
 				resource: ['zaloPoll'],
-                operation: ['lockPoll'],
-            },
-        },
-        description: 'ID của bình chọn',
-    },
-]; 
+				operation: ['lockPoll'],
+			},
+		},
+		description: 'ID của bình chọn',
+	},
+];

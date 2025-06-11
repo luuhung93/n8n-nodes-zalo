@@ -29,7 +29,7 @@
     "preinstall": "npx only-allow pnpm",
 		"build": "tsc && gulp build:icons",
 		"dev": "tsc --watch",
-		"format": "prettier nodes --write",
+		"format": "prettier nodes credentials --write",
 		"lint": "eslint nodes package.json",
 		"lintfix": "eslint nodes package.json --fix",
 		"prepublishOnly": "pnpm build && pnpm lint -c .eslintrc.prepublish.js nodes credentials package.json",
@@ -57,6 +57,7 @@
 		]
 	},
 	"devDependencies": {
+		"@types/node": "^24.0.0",
 		"@typescript-eslint/parser": "^8.34.0",
 		"concurrently": "^9.1.2",
 		"eslint": "^9.28.0",

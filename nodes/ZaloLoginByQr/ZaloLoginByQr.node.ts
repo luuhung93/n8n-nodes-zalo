@@ -34,7 +34,7 @@ export class ZaloLoginByQr implements INodeType {
 				name: 'n8nZaloApi',
 				required: true,
 				displayName: 'n8n Account Credential',
-			  },
+			},
 		],
 		properties: [
 			{
@@ -55,8 +55,8 @@ export class ZaloLoginByQr implements INodeType {
 		const fileName = 'zalo-qr-code.png'; // Fixed filename
 
 		// Get the credentials if provided
-		let zaloCredential : any;
-		let n8nCredential : any;
+		let zaloCredential: any;
+		let n8nCredential: any;
 
 		// Try to get Zalo API credential
 		try {
@@ -87,8 +87,6 @@ export class ZaloLoginByQr implements INodeType {
 		}
 
 		try {
-			
-
 			const zaloOptions: any = {
 				selfListen: true,
 				logging: true,
@@ -113,12 +111,16 @@ export class ZaloLoginByQr implements INodeType {
 
 					// Get the credential data from the n8n credential
 					const n8nApiKey = selectedCredential.apiKey as string;
-					const n8nUrl = selectedCredential.url as string || 'http://localhost:5678';
+					const n8nUrl = (selectedCredential.url as string) || 'http://localhost:5678';
 
-					console.error(`Using n8n API at ${n8nUrl} with API key ${n8nApiKey ? 'provided' : 'not provided'}`);
+					console.error(
+						`Using n8n API at ${n8nUrl} with API key ${n8nApiKey ? 'provided' : 'not provided'}`,
+					);
 
 					// For now, we'll just log in with QR code since we don't have a way to get Zalo credentials from n8n
-					console.error('n8n credential support is not fully implemented yet. Will use QR code login.');
+					console.error(
+						'n8n credential support is not fully implemented yet. Will use QR code login.',
+					);
 
 					// Re-initialize Zalo without credentials
 					zalo = new Zalo(zaloOptions);
@@ -166,12 +168,15 @@ export class ZaloLoginByQr implements INodeType {
 				const userAgent = context.userAgent || '';
 
 				console.error('=== ZALO CREDENTIALS ===');
-				console.error('Cookie:', cookie ? `Received (length: ${typeof cookie === 'string' ? cookie.length : (Array.isArray(cookie) ? cookie.length : 'unknown')})` : 'None');
+				console.error(
+					'Cookie:',
+					cookie
+						? `Received (length: ${typeof cookie === 'string' ? cookie.length : Array.isArray(cookie) ? cookie.length : 'unknown'})`
+						: 'None',
+				);
 				console.error('IMEI:', imei ? imei : 'None');
 				console.error('User Agent:', userAgent ? userAgent : 'None');
 				console.error('=== END CREDENTIALS ===');
-
-
 			};
 
 			// Function to set up event listeners
@@ -187,11 +192,13 @@ export class ZaloLoginByQr implements INodeType {
 						// Check if result is a promise
 						if (contextResult && typeof contextResult.then === 'function') {
 							// It's a promise, use .then
-							contextResult.then((context: any) => {
-								processContext(context);
-							}).catch((error: any) => {
-								console.error('Error getting context:', error);
-							});
+							contextResult
+								.then((context: any) => {
+									processContext(context);
+								})
+								.catch((error: any) => {
+									console.error('Error getting context:', error);
+								});
 						} else {
 							// It's not a promise, use directly
 							processContext(contextResult);
@@ -220,21 +227,32 @@ export class ZaloLoginByQr implements INodeType {
 				const timeoutId = setTimeout(() => {
 					if (!isResolved) {
 						isResolved = true;
-						reject(new NodeOperationError(this.getNode(), 'Timeout generating QR code. Please try again or check your Zalo connection.'));
+						reject(
+							new NodeOperationError(
+								this.getNode(),
+								'Timeout generating QR code. Please try again or check your Zalo connection.',
+							),
+						);
 					}
 				}, timeout * 1000); // Convert seconds to milliseconds
 
 				try {
 					// @ts-ignore - Ignore type checking for loginQR method
 					let api = await zalo.loginQR(null, (qrEvent: any) => {
-						console.error('Received QR event type:', qrEvent ? qrEvent.type : 'no event');
+						console.error(
+							'Received QR event type:',
+							qrEvent ? qrEvent.type : 'no event',
+						);
 
 						// Handle different event types based on the LoginQRCallbackEventType enum
 						switch (qrEvent.type) {
 							case 0: // QRCodeGenerated
 								if (qrEvent?.data?.image) {
 									const qrCodeBase64 = qrEvent.data.image;
-									console.error('QR code generated, length:', qrCodeBase64.length);
+									console.error(
+										'QR code generated, length:',
+										qrCodeBase64.length,
+									);
 
 									// If QR code was already resolved, we don't need to do anything
 									if (isResolved) return;
@@ -249,7 +267,7 @@ export class ZaloLoginByQr implements INodeType {
 									}
 								} else {
 									console.error('Could not get QR code from Zalo SDK');
-									reject(new Error("Could not get QR code"));
+									reject(new Error('Could not get QR code'));
 								}
 								break;
 
@@ -279,19 +297,19 @@ export class ZaloLoginByQr implements INodeType {
 									const imei = qrEvent.data.imei || '';
 									const userAgent = qrEvent.data.userAgent || '';
 
-									console.error('Cookie received:', cookie.length > 0 ? 'Yes' : 'No');
+									console.error(
+										'Cookie received:',
+										cookie.length > 0 ? 'Yes' : 'No',
+									);
 									console.error('IMEI received:', imei ? 'Yes' : 'No');
 									console.error('User Agent received:', userAgent ? 'Yes' : 'No');
 
 									// Save credentials to file immediately
 									try {
 										// Create debug file
-										
 
 										// Save credentials to output directory
 										if (cookie.length > 0 || imei || userAgent) {
-											
-
 											// Create credential info file for auto-creation
 											const credentialName = 'Zalo API Credentials';
 											const credentialData = {
@@ -300,51 +318,66 @@ export class ZaloLoginByQr implements INodeType {
 												userAgent: userAgent,
 												proxy: proxy || '',
 												supportCode: '',
-												licenseKey: ''
+												licenseKey: '',
 											};
-
-											
 
 											// Try to automatically create the credential by directly calling the n8n API
 											try {
-												console.error('Attempting to create Zalo credential via n8n API');
+												console.error(
+													'Attempting to create Zalo credential via n8n API',
+												);
 
 												// Prepare the credential data for n8n API
 												const credentialApiData = {
 													name: credentialName,
 													type: 'zaloApi',
 													nodesAccess: [],
-													data: credentialData
+													data: credentialData,
 												};
 
 												// Try different ports that n8n might be running on
 												const ports = [5678];
 
 												// Function to create credential on a specific port
-												const createCredentialOnPort = async (port: number) => {
-													const n8nApi =  await this.getCredentials('n8nZaloApi');
-													const n8nApiUrl = n8nApi.url as string;
+												const createCredentialOnPort = async (
+													port: number,
+												) => {
+													const n8nApi =
+														await this.getCredentials('n8nZaloApi');
+													// const n8nApiUrl = n8nApi.url as string;
 													// const fullApiUrl = `${n8nApiUrl}/api/v1/credentials`;
 													const fullApiUrl = `http://127.0.0.1:5678/api/v1/credentials`;
 
 													const n8nApiKey = n8nApi.apiKey as string;
-													console.error(`Trying to create credential via n8n API at ${fullApiUrl}`);
+													console.error(
+														`Trying to create credential via n8n API at ${fullApiUrl}`,
+													);
 
 													try {
-														await axios.post(fullApiUrl, credentialApiData,
+														await axios.post(
+															fullApiUrl,
+															credentialApiData,
 															{
-														   headers: {
-															 'Content-Type': 'application/json',
-															 'X-N8N-API-KEY': n8nApiKey as string
-														   },
-														 })
-														 
-														console.error('Credential created successfully via n8n API');
+																headers: {
+																	'Content-Type':
+																		'application/json',
+																	'X-N8N-API-KEY':
+																		n8nApiKey as string,
+																},
+															},
+														);
+
+														console.error(
+															'Credential created successfully via n8n API',
+														);
 														console.error('Credential ID:');
-														  
+
 														return true;
 													} catch (apiError: any) {
-														console.error(`Error creating credential on port ${port}:`, apiError.message);
+														console.error(
+															`Error creating credential on port ${port}:`,
+															apiError.message,
+														);
 														return false;
 													}
 												};
@@ -357,37 +390,60 @@ export class ZaloLoginByQr implements INodeType {
 													// Try each port one by one
 													for (const port of ports) {
 														try {
-															const result = await createCredentialOnPort.call(this, port);
+															const result =
+																await createCredentialOnPort.call(
+																	this,
+																	port,
+																);
 															if (result) {
 																credentialCreated = true;
 																break;
 															}
 														} catch (error) {
-															console.error(`Error trying port ${port}:`, error.message);
+															console.error(
+																`Error trying port ${port}:`,
+																error.message,
+															);
 														}
 													}
-
-
-												})().catch(error => {
-													console.error('Error in credential creation:', error.message);
+												})().catch((error) => {
+													console.error(
+														'Error in credential creation:',
+														error.message,
+													);
 												});
 
 												if (!credentialCreated) {
-													console.error('Could not create credential via n8n API on any port.');
-													console.error('Credential info saved to file. You can create it manually using:');
-													console.error('node auto-create-zalo-credential.js');
+													console.error(
+														'Could not create credential via n8n API on any port.',
+													);
+													console.error(
+														'Credential info saved to file. You can create it manually using:',
+													);
+													console.error(
+														'node auto-create-zalo-credential.js',
+													);
 												}
 											} catch (error: any) {
-												console.error(`Error creating credential: ${error.message}`);
-												console.error('Credential info saved to file. You can create it manually using:');
-												console.error('node auto-create-zalo-credential.js');
+												console.error(
+													`Error creating credential: ${error.message}`,
+												);
+												console.error(
+													'Credential info saved to file. You can create it manually using:',
+												);
+												console.error(
+													'node auto-create-zalo-credential.js',
+												);
 											}
 										} else {
 											console.error('=== NO CREDENTIALS TO SAVE ===');
 											console.error('No login information available to save');
 										}
 									} catch (fileError: any) {
-										console.error('Error saving credentials:', fileError.message);
+										console.error(
+											'Error saving credentials:',
+											fileError.message,
+										);
 									}
 								}
 								break;
@@ -403,25 +459,28 @@ export class ZaloLoginByQr implements INodeType {
 
 					// Set up event listeners after getting the API
 					api.listener.onConnected(() => {
-						console.error("=== ZALO SDK CONNECTED ===");
+						console.error('=== ZALO SDK CONNECTED ===');
 						// Get context after successful connection
 						setupEventListeners(api);
 					});
 
 					// Listen for errors
 					api.listener.onError((error: any) => {
-						console.error("=== ZALO ERROR ===", error);
+						console.error('=== ZALO ERROR ===', error);
 					});
 
 					// Listen for messages (might contain login information)
 					api.listener.onMessage((message: any) => {
-						console.error("=== ZALO MESSAGE RECEIVED ===");
-						console.error("Message type:", message.type);
-						console.error("Message content:", JSON.stringify(message).substring(0, 200) + '...');
+						console.error('=== ZALO MESSAGE RECEIVED ===');
+						console.error('Message type:', message.type);
+						console.error(
+							'Message content:',
+							JSON.stringify(message).substring(0, 200) + '...',
+						);
 
 						// Check if this is a login confirmation message
 						if (message.type === 'login_success' || message.type === 'qr_scanned') {
-							console.error("=== QR CODE SCANNED OR LOGIN SUCCESSFUL ===");
+							console.error('=== QR CODE SCANNED OR LOGIN SUCCESSFUL ===');
 							setupEventListeners(api);
 						}
 					});
@@ -448,14 +507,20 @@ export class ZaloLoginByQr implements INodeType {
 			const newItem: INodeExecutionData = {
 				json: {
 					success: true,
-					message: selectedCredential === n8nCredential
-						? 'Using n8n account credential. QR code generated successfully.'
-						: (selectedCredential === zaloCredential
-							? 'Using existing Zalo credentials. QR code generated successfully.'
-							: 'QR code generated successfully. Scan with Zalo app to login.'),
+					message:
+						selectedCredential === n8nCredential
+							? 'Using n8n account credential. QR code generated successfully.'
+							: selectedCredential === zaloCredential
+								? 'Using existing Zalo credentials. QR code generated successfully.'
+								: 'QR code generated successfully. Scan with Zalo app to login.',
 					fileName,
 					usingExistingCredential: !!selectedCredential,
-					credentialType: selectedCredential === n8nCredential ? 'n8nZaloApi' : (selectedCredential === zaloCredential ? 'zaloApi' : null),
+					credentialType:
+						selectedCredential === n8nCredential
+							? 'n8nZaloApi'
+							: selectedCredential === zaloCredential
+								? 'zaloApi'
+								: null,
 				},
 				binary: {
 					data: await this.helpers.prepareBinaryData(binaryData, fileName, 'image/png'),
@@ -467,18 +532,27 @@ export class ZaloLoginByQr implements INodeType {
 			// Add credential creation instructions to the output
 			if (returnData[0] && returnData[0].json) {
 				if (!selectedCredential) {
-					returnData[0].json.credentialInstructions = 'Credentials have been saved to file. Credentials will be created automatically if n8n API credentials are provided.';
-					returnData[0].json.credentialFilePath = path.join(process.cwd(), 'output', 'zalo-credentials.json');
+					returnData[0].json.credentialInstructions =
+						'Credentials have been saved to file. Credentials will be created automatically if n8n API credentials are provided.';
+					returnData[0].json.credentialFilePath = path.join(
+						process.cwd(),
+						'output',
+						'zalo-credentials.json',
+					);
 					returnData[0].json.autoCreateScript = 'node auto-create-zalo-credential.js';
-					returnData[0].json.autoCreateApi = 'Credentials will be created automatically via n8n API if n8n API credentials are provided.';
+					returnData[0].json.autoCreateApi =
+						'Credentials will be created automatically via n8n API if n8n API credentials are provided.';
 				} else if (selectedCredential === n8nCredential) {
-					returnData[0].json.credentialInstructions = 'Using n8n account credential. New Zalo credentials will be created automatically after successful login.';
+					returnData[0].json.credentialInstructions =
+						'Using n8n account credential. New Zalo credentials will be created automatically after successful login.';
 					returnData[0].json.credentialName = selectedCredential.name || 'Unknown';
 					returnData[0].json.credentialId = selectedCredential.id || 'Unknown';
 					returnData[0].json.credentialType = 'n8nZaloApi';
-					returnData[0].json.autoCreateApi = 'Credentials will be created automatically via n8n API after successful login.';
+					returnData[0].json.autoCreateApi =
+						'Credentials will be created automatically via n8n API after successful login.';
 				} else {
-					returnData[0].json.credentialInstructions = 'Using existing Zalo credentials from the selected credential.';
+					returnData[0].json.credentialInstructions =
+						'Using existing Zalo credentials from the selected credential.';
 					returnData[0].json.credentialName = selectedCredential.name || 'Unknown';
 					returnData[0].json.credentialId = selectedCredential.id || 'Unknown';
 					returnData[0].json.credentialType = 'zaloApi';
